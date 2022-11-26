@@ -3,6 +3,7 @@
 
 import pygame
 import random
+import pickle
 import math
 
 SCREEN_DIM = (800, 600)
@@ -142,6 +143,9 @@ def draw_help():
     data.append(["E", "More points"])
     data.append(["Q", "Less points"])
     data.append(["", ""])
+    data.append(["S", "Save configuration to topsecretdata.txt"])
+    data.append(["L", "Load configuration from topsecretdata.txt"])
+    data.append(["", ""])
     data.append([str(steps), "Current points"])
 
     pygame.draw.lines(gameDisplay, (255, 50, 50, 255), True, [
@@ -198,6 +202,15 @@ if __name__ == "__main__":
                     show_help = not show_help
                 if event.key == pygame.K_q:
                     steps -= 1 if steps > 1 else 0
+                if event.key == pygame.K_s:
+                    with open("topsecretdata.txt", "wb") as file:
+                        pickle.dump(knot, file)
+                if event.key == pygame.K_l:
+                    try:
+                        with open("topsecretdata.txt", "rb") as file:
+                            knot = pickle.load(file)
+                    except:
+                        pass
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 knot.add_point(Vec2d(event.pos[0], event.pos[1]),
